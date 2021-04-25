@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - "./test.env"
+    volumes:
+      - ./data:/var/lib/postgresql/data/
+    restart: always
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    volumes:
+      - ./storage/redis/data:/data
+    restart: always
+
+  tgbot:
+    container_name: tgbot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: "/code"
+    depends_on:
+      - db
+    env_file:
+      - "./test.env"
+    command: sh -c "sudo chmod -R 777 config ; python start_tg_bot.py"
+#    command: sleep 5000
+    volumes:
+#      - ./migrations:/code/migrations
+#      - ./aerich.ini:/code/aerich.ini
+      - .:/code
+    restart: always

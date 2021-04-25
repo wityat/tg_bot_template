@@ -1,0 +1,10 @@
+aiogram
+python-dotenv
+tortoise-orm
+Pillow
+aioschedule
+aioredis
+redis
+asyncpg
+aiomysql
+aerich
